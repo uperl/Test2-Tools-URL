@@ -1,6 +1,8 @@
-use Test2::V0;
+use Test2::V0 -no_srand => 1;
 use Test2::Tools::Compare::URL;
 
-ok 1, 'todo';
+imported_ok $_ for qw(
+  url
+);
 
 done_testing
