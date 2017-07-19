@@ -5,7 +5,6 @@ use warnings;
 use 5.008001;
 use Carp                   ();
 use Test2::Compare         ();
-use Test2::Compare::URL    ();
 use Test2::Compare::Hash   ();
 use Test2::Compare::String ();
 use base qw( Exporter );
@@ -18,7 +17,7 @@ our @EXPORT = qw( url url_base url_component );
 =head1 SYNOPSIS
 
  use Test2::V0;
- use Test2::Compare::URL;
+ use Test2::Tools::Compare::URL;
  
  is(
    "http://example.com/path1/path2?query=1#fragment",
@@ -56,7 +55,7 @@ Checks that the given string or object is a valid URL.
 
 sub url (&)
 {
-  Test2::Compare::build('Test2::Compare::URL', @_);
+  Test2::Compare::build('Test2::Tools::Compare::URL::CompareCheck', @_);
 }
 
 =head2 url_base
@@ -78,7 +77,7 @@ sub url_base ($)
   if($build)
   { $build->set_base($base) }
   else
-  { Test2::Compare::URL->set_global_base($base) }
+  { Test2::Tools::Compare::URL::CompareCheck->set_global_base($base) }
 }
 
 =head2 url_component
@@ -125,6 +124,107 @@ sub url_component ($$)
   my $build = Test2::Compare::get_build()or Carp::croak("No current build!");
   $build->add_component($name, $expect);
 }  
+
+package Test2::Tools::Compare::URL::CompareCheck;
+
+use overload ();
+use URI;
+use Scalar::Util qw( blessed );
+use base qw( Test2::Compare::Base );
+
+sub name { '<URL>' }
+
+my $global_base;
+
+sub _uri
+{
+  my($self, $url) = @_;
+  $self->{base}
+    ? URI->new_abs("$url", $self->{base})
+    : $global_base
+      ? URI->new_abs("$url", $global_base)
+      : URI->new("$url");
+}
+
+sub verify
+{
+  my($self, %params) = @_;
+  my($got, $exists) = @params{qw/ got exists /};
+  
+  return 0 unless $exists;
+  return 0 unless $got;
+  return 0 if ref($got) && !blessed($got);
+  return 0 if ref($got) && !overload::Method($got, '""');
+  
+  my $url = eval { $self->_uri($got) };  
+  return 0 if $@;
+  return 0 if ! $url->has_recognized_scheme;
+  
+  return 1;
+}
+
+sub set_base
+{
+  my($self, $base) = @_;
+  $self->{base} = $base;
+}
+
+sub set_global_base
+{
+  my($self, $base) = @_;
+  $global_base = $base;
+}
+
+sub add_component
+{
+  my($self, $name, $expect) = @_;
+  push @{ $self->{component} }, [ $name, $expect ];
+}
+
+sub deltas
+{
+  my($self, %args) = @_;
+  my($got, $convert, $seen) = @args{'got', 'convert', 'seen'};
+
+  my $uri = $self->_uri($got);
+  
+  my @deltas;
+  
+  foreach my $comp (@{ $self->{component} })
+  {
+    my($name, $expect) = @$comp;
+    
+    my $method = $name;
+    $method = 'host_port' if $method eq 'hostport';
+    my $value = $uri->$method;
+    my $check = $convert->($expect);
+
+    if($method eq 'query' && !$check->isa('Test2::Compare::String'))
+    {
+      my @query = $uri->query_form;
+      if($check->isa('Test2::Compare::Hash'))
+      {
+        my %query = @query;
+        $value = \%query;
+      }
+      elsif($check->isa('Test2::Compare::Array'))
+      {
+        $value = \@query;
+      }
+    }
+
+
+    push @deltas => $check->run(
+      id      => [ HASH => $name ],
+      convert => $convert,
+      seen    => $seen,
+      exists  => defined $value,
+      got     => $value,
+    );
+  }
+  
+  @deltas;
+}
 
 1;
 

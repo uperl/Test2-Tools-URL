@@ -5,7 +5,7 @@ Compare a URL in your Test2 test
 # SYNOPSIS
 
     use Test2::V0;
-    use Test2::Compare::URL;
+    use Test2::Tools::Compare::URL;
     
     is(
       "http://example.com/path1/path2?query=1#fragment",
@@ -45,7 +45,8 @@ Checks that the given string or object is a valid URL.
       url_base $url;
     };
 
-Use the given base URL for relative paths.
+Use the given base URL for relative paths.  If specified outside of a URL,
+then it will apply to all url checks.
 
 ## url\_component
 

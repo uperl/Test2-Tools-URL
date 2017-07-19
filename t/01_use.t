@@ -2,7 +2,6 @@ use Test2::V0;
 sub require_ok ($);
 
 require_ok 'Test2::Tools::Compare::URL';
-require_ok 'Test2::Compare::URL';
 
 done_testing;
 
