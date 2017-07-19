@@ -73,7 +73,7 @@ sub url_base ($)
 {
   my($base) = @_;
 
-  my $build = Test2::Compare::get_build()or Carp::croak("No current build!");
+  my $build = Test2::Compare::get_build() or Carp::croak("No current build!");
   $build->set_base($base);
 }
 
