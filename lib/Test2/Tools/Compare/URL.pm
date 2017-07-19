@@ -65,7 +65,8 @@ sub url (&)
    url_base $url;
  };
 
-Use the given base URL for relative paths.
+Use the given base URL for relative paths.  If specified outside of a URL,
+then it will apply to all url checks.
 
 =cut
 
@@ -73,8 +74,11 @@ sub url_base ($)
 {
   my($base) = @_;
 
-  my $build = Test2::Compare::get_build() or Carp::croak("No current build!");
-  $build->set_base($base);
+  my $build = Test2::Compare::get_build();
+  if($build)
+  { $build->set_base($base) }
+  else
+  { Test2::Compare::URL->set_global_base($base) }
 }
 
 =head2 url_component

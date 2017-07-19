@@ -24,12 +24,16 @@ L<Test2::Suite>, L<Test2::Tools::Compare::URL>
 
 sub name { '<URL>' }
 
+my $global_base;
+
 sub _uri
 {
   my($self, $url) = @_;
   $self->{base}
     ? URI->new_abs("$url", $self->{base})
-    : URI->new("$url");
+    : $global_base
+      ? URI->new_abs("$url", $global_base)
+      : URI->new("$url");
 }
 
 sub verify
@@ -53,6 +57,12 @@ sub set_base
 {
   my($self, $base) = @_;
   $self->{base} = $base;
+}
+
+sub set_global_base
+{
+  my($self, $base) = @_;
+  $global_base = $base;
 }
 
 sub add_component

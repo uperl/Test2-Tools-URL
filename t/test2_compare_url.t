@@ -267,4 +267,21 @@ subtest 'url_base' => sub {
 
 };
 
+subtest 'url_base' => sub {
+
+  url_base 'http://example.com/a/b/c/';
+
+  is(
+    '../foo',
+    url {
+      url_component host => 'example.com';
+      url_component path => '/a/b/foo';
+      url_component port => 80;
+    },
+  );
+  
+  url_base undef;
+
+};
+
 done_testing
