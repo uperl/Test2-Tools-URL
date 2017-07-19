@@ -21,8 +21,13 @@ our @EXPORT = qw( url url_component );
  use Test2::Compare::URL;
  
  is(
-   "http://example.com",
+   "http://example.com/path1/path2?query=1#fragment",
    url {
+     url_component scheme   => 'http';
+     url_component host     => 'example.com';
+     url_component path     => '/path1/path2';
+     url_component query    => { query => 1 };
+     url_component fragment => 'fragment';
    },
    'url is as expected',
  );
@@ -32,6 +37,12 @@ our @EXPORT = qw( url url_component );
 This set of L<Test2> tools helps writing tests against
 URLs, represented as either strings, or as objects that
 stringify to URLs (such as L<URI> or L<Mojo::URL>).
+
+The idea is that you may be writing tests against URLs,
+but you may only care about one or two components, and
+you may not want to worry about decoding the URL or breaking
+the components up.  The URL may be nested deeply.  This
+tool is intended to help!
 
 =head1 FUNCTIONS
 
@@ -54,6 +65,8 @@ sub url (&)
    url_component $component, $check;
  }
 
+Check that the given URL component matches.
+
 =over 4
 
 =item scheme
@@ -71,6 +84,8 @@ sub url (&)
 =item path
 
 =item query
+
+May be either a string, list or array!
 
 =item fragment
 

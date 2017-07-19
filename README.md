@@ -8,8 +8,13 @@ Compare a URL in your Test2 test
     use Test2::Compare::URL;
     
     is(
-      "http://example.com",
+      "http://example.com/path1/path2?query=1#fragment",
       url {
+        url_component scheme   => 'http';
+        url_component host     => 'example.com';
+        url_component path     => '/path1/path2';
+        url_component query    => { query => 1 };
+        url_component fragment => 'fragment';
       },
       'url is as expected',
     );
@@ -19,6 +24,12 @@ Compare a URL in your Test2 test
 This set of [Test2](https://metacpan.org/pod/Test2) tools helps writing tests against
 URLs, represented as either strings, or as objects that
 stringify to URLs (such as [URI](https://metacpan.org/pod/URI) or [Mojo::URL](https://metacpan.org/pod/Mojo::URL)).
+
+The idea is that you may be writing tests against URLs,
+but you may only care about one or two components, and
+you may not want to worry about decoding the URL or breaking
+the components up.  The URL may be nested deeply.  This
+tool is intended to help!
 
 # FUNCTIONS
 
@@ -34,6 +45,8 @@ Checks that the given string or object is a valid URL.
       url_component $component, $check;
     }
 
+Check that the given URL component matches.
+
 - scheme
 - authority
 - userinfo
@@ -42,6 +55,9 @@ Checks that the given string or object is a valid URL.
 - port
 - path
 - query
+
+    May be either a string, list or array!
+
 - fragment
 
 # SEE ALSO
