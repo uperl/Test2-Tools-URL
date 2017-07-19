@@ -39,6 +39,14 @@ tool is intended to help!
 
 Checks that the given string or object is a valid URL.
 
+## url\_base
+
+    url {
+      url_base $url;
+    };
+
+Use the given base URL for relative paths.
+
 ## url\_component
 
     url {

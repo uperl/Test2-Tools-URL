@@ -10,7 +10,7 @@ use Test2::Compare::Hash   ();
 use Test2::Compare::String ();
 use base qw( Exporter );
 
-our @EXPORT = qw( url url_component );
+our @EXPORT = qw( url url_base url_component );
 
 # ABSTRACT: Compare a URL in your Test2 test
 # VERSION
@@ -59,6 +59,24 @@ sub url (&)
   Test2::Compare::build('Test2::Compare::URL', @_);
 }
 
+=head2 url_base
+
+ url {
+   url_base $url;
+ };
+
+Use the given base URL for relative paths.
+
+=cut
+
+sub url_base ($)
+{
+  my($base) = @_;
+
+  my $build = Test2::Compare::get_build()or Carp::croak("No current build!");
+  $build->set_base($base);
+}
+
 =head2 url_component
 
  url {
@@ -101,7 +119,6 @@ sub url_component ($$)
     unless $name =~ /^(?:scheme|authority|userinfo|hostport|host|port|path|query|fragment)$/;
   
   my $build = Test2::Compare::get_build()or Carp::croak("No current build!");
-
   $build->add_component($name, $expect);
 }  
 

@@ -1,5 +1,5 @@
 use Test2::V0 -no_srand => 1;
-use Test2::Tools::Compare::URL qw( url url_component );
+use Test2::Tools::Compare::URL qw( url url_base url_component );
 use Test2::Compare::URL;
 
 subtest 'as string' => sub {
@@ -251,7 +251,19 @@ subtest 'component' => sub {
   );
   
   note $_->message for grep { $_->isa('Test2::Event::Diag') } @$e;
+};
 
+subtest 'url_base' => sub {
+
+  is(
+    '../foo',
+    url {
+      url_base 'http://example.com/a/b/c/';
+      url_component host => 'example.com';
+      url_component path => '/a/b/foo';
+      url_component port => 80;
+    },
+  );
 
 };
 

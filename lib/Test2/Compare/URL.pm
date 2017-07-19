@@ -24,6 +24,14 @@ L<Test2::Suite>, L<Test2::Tools::Compare::URL>
 
 sub name { '<URL>' }
 
+sub _uri
+{
+  my($self, $url) = @_;
+  $self->{base}
+    ? URI->new_abs("$url", $self->{base})
+    : URI->new("$url");
+}
+
 sub verify
 {
   my($self, %params) = @_;
@@ -34,11 +42,17 @@ sub verify
   return 0 if ref($got) && !blessed($got);
   return 0 if ref($got) && !overload::Method($got, '""');
   
-  my $url = eval { URI->new("$got") };  
+  my $url = eval { $self->_uri($got) };  
   return 0 if $@;
   return 0 if ! $url->has_recognized_scheme;
   
   return 1;
+}
+
+sub set_base
+{
+  my($self, $base) = @_;
+  $self->{base} = $base;
 }
 
 sub add_component
@@ -52,7 +66,7 @@ sub deltas
   my($self, %args) = @_;
   my($got, $convert, $seen) = @args{'got', 'convert', 'seen'};
 
-  my $uri = URI->new("$got");
+  my $uri = $self->_uri($got);
   
   my @deltas;
   
