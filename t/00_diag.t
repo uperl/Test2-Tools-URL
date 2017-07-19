@@ -10,10 +10,13 @@ my %modules;
 my $post_diag;
 
 $modules{$_} = $_ for qw(
+  Carp
   ExtUtils::MakeMaker
   Mojolicious
   Test2::Compare
   Test2::Compare::Base
+  Test2::Compare::Hash
+  Test2::Compare::String
   Test2::V0
   URI
 );

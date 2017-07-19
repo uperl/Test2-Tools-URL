@@ -28,6 +28,22 @@ stringify to URLs (such as [URI](https://metacpan.org/pod/URI) or [Mojo::URL](ht
 
 Checks that the given string or object is a valid URL.
 
+## url\_component
+
+    url {
+      url_component $component, $check;
+    }
+
+- scheme
+- authority
+- userinfo
+- hostport
+- host
+- port
+- path
+- query
+- fragment
+
 # SEE ALSO
 
 [Test2::Suite](https://metacpan.org/pod/Test2::Suite)

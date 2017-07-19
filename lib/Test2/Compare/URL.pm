@@ -6,6 +6,7 @@ use 5.008001;
 use overload ();
 use URI;
 use Scalar::Util qw( blessed );
+use Carp ();
 use base qw( Test2::Compare::Base );
 
 # ABSTRACT: Representation of a URL during deep comparison.
@@ -38,6 +39,57 @@ sub verify
   return 0 if ! $url->has_recognized_scheme;
   
   return 1;
+}
+
+sub add_component
+{
+  my($self, $name, $expect) = @_;
+  push @{ $self->{component} }, [ $name, $expect ];
+}
+
+sub deltas
+{
+  my($self, %args) = @_;
+  my($got, $convert, $seen) = @args{'got', 'convert', 'seen'};
+
+  my $uri = URI->new("$got");
+  
+  my @deltas;
+  
+  foreach my $comp (@{ $self->{component} })
+  {
+    my($name, $expect) = @$comp;
+    
+    my $method = $name;
+    $method = 'host_port' if $method eq 'hostport';
+    my $value = $uri->$method;
+    my $check = $convert->($expect);
+
+    if($method eq 'query' && !$check->isa('Test2::Compare::String'))
+    {
+      my @query = $uri->query_form;
+      if($check->isa('Test2::Compare::Hash'))
+      {
+        my %query = @query;
+        $value = \%query;
+      }
+      elsif($check->isa('Test2::Compare::Array'))
+      {
+        $value = \@query;
+      }
+    }
+
+
+    push @deltas => $check->run(
+      id      => [ HASH => $name ],
+      convert => $convert,
+      seen    => $seen,
+      exists  => defined $value,
+      got     => $value,
+    );
+  }
+  
+  @deltas;
 }
 
 1;

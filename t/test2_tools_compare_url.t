@@ -3,6 +3,7 @@ use Test2::Tools::Compare::URL;
 
 imported_ok $_ for qw(
   url
+  url_component
 );
 
 done_testing

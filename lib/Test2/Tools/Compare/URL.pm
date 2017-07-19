@@ -3,11 +3,14 @@ package Test2::Tools::Compare::URL;
 use strict;
 use warnings;
 use 5.008001;
-use Test2::Compare      ();
-use Test2::Compare::URL ();
+use Carp                   ();
+use Test2::Compare         ();
+use Test2::Compare::URL    ();
+use Test2::Compare::Hash   ();
+use Test2::Compare::String ();
 use base qw( Exporter );
 
-our @EXPORT = qw( url );
+our @EXPORT = qw( url url_component );
 
 # ABSTRACT: Compare a URL in your Test2 test
 # VERSION
@@ -44,6 +47,48 @@ sub url (&)
 {
   Test2::Compare::build('Test2::Compare::URL', @_);
 }
+
+=head2 url_component
+
+ url {
+   url_component $component, $check;
+ }
+
+=over 4
+
+=item scheme
+
+=item authority
+
+=item userinfo
+
+=item hostport
+
+=item host
+
+=item port
+
+=item path
+
+=item query
+
+=item fragment
+
+=back
+
+=cut
+
+sub url_component ($$)
+{
+  my($name, $expect) = @_;
+  
+  Carp::croak("$name is not a valid URL component")
+    unless $name =~ /^(?:scheme|authority|userinfo|hostport|host|port|path|query|fragment)$/;
+  
+  my $build = Test2::Compare::get_build()or Carp::croak("No current build!");
+
+  $build->add_component($name, $expect);
+}  
 
 1;
 
