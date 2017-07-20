@@ -1,4 +1,4 @@
-package Test2::Tools::Compare::URL;
+package Test2::Tools::URL;
 
 use strict;
 use warnings;
@@ -17,7 +17,7 @@ our @EXPORT = qw( url url_base url_component );
 =head1 SYNOPSIS
 
  use Test2::V0;
- use Test2::Tools::Compare::URL;
+ use Test2::Tools::URL;
  
  is(
    "http://example.com/path1/path2?query=1#fragment",
@@ -55,7 +55,7 @@ Checks that the given string or object is a valid URL.
 
 sub url (&)
 {
-  Test2::Compare::build('Test2::Tools::Compare::URL::CompareCheck', @_);
+  Test2::Compare::build('Test2::Tools::URL::Check', @_);
 }
 
 =head2 url_base
@@ -77,7 +77,7 @@ sub url_base ($)
   if($build)
   { $build->set_base($base) }
   else
-  { Test2::Tools::Compare::URL::CompareCheck->set_global_base($base) }
+  { Test2::Tools::URL::Check->set_global_base($base) }
 }
 
 =head2 url_component
@@ -125,7 +125,7 @@ sub url_component ($$)
   $build->add_component($name, $expect);
 }  
 
-package Test2::Tools::Compare::URL::CompareCheck;
+package Test2::Tools::URL::Check;
 
 use overload ();
 use URI;
