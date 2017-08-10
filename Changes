@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Correctly handle Windows absolute path
 
 0.01      2017-07-20 12:27:17 -0400
   - initial version

@@ -199,6 +199,11 @@ sub deltas
     my $value = $uri->$method;
     my $check = $convert->($expect);
 
+    if($^O eq 'MSWin32' && $method eq 'path')
+    {
+      $value =~ s{/([A-Z]:)}{$1};
+    }
+
     if($method eq 'query' && !$check->isa('Test2::Compare::String'))
     {
       my @query = $uri->query_form;
