@@ -128,7 +128,7 @@ sub url_component ($$)
 package Test2::Tools::URL::Check;
 
 use overload ();
-use URI;
+use URI 1.61;
 use Scalar::Util qw( blessed );
 use base qw( Test2::Compare::Base );
 
