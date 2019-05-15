@@ -1,4 +1,4 @@
-use Test2::V0 -no_srand => 1;
+use Test2::V0 0.000121 -no_srand => 1;
 use Test2::Tools::URL;
 
 imported_ok $_ for qw(

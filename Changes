@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Bump requirement on Test2::Suite to latest (gh#3)
 
 0.03      2018-04-30 15:44:51 -0400
   - Require URI 1.61 (needed for has_recognized_scheme)
