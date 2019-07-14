@@ -129,6 +129,7 @@ package Test2::Tools::URL::Check;
 
 use overload ();
 use URI 1.61;
+use URI::QueryParam;
 use Scalar::Util qw( blessed );
 use base qw( Test2::Compare::Base );
 
@@ -206,15 +207,13 @@ sub deltas
 
     if($method eq 'query' && !$check->isa('Test2::Compare::String'))
     {
-      my @query = $uri->query_form;
       if($check->isa('Test2::Compare::Hash'))
       {
-        my %query = @query;
-        $value = \%query;
+        $value = $uri->query_form_hash;
       }
       elsif($check->isa('Test2::Compare::Array'))
       {
-        $value = \@query;
+        $value = [ $uri->query_form ];
       }
     }
 
