@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Better handling of duplicate keys in query parameters (alabamapaul++ gh#4)
 
 0.04      2019-05-15 06:09:39 -0600
   - Bump requirement on Test2::Suite to latest (gh#2, gh#3)

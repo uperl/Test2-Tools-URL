@@ -75,7 +75,11 @@ Check that the given URL component matches.
 
 # AUTHOR
 
-Graham Ollis <plicease@cpan.org>
+Author: Graham Ollis <plicease@cpan.org>
+
+Contributors:
+
+Paul Durden (alabamapaul, PDURDEN)
 
 # COPYRIGHT AND LICENSE
 
