@@ -9,6 +9,7 @@ imported_ok $_ for qw(
   url_host
   url_secure
   url_insecure
+  url_mail_to
 );
 
 subtest 'as string' => sub {
@@ -378,6 +379,36 @@ subtest 'url_secure / url_insecure' => sub {
       end;
     },
     'secure fail',
+  );
+
+};
+
+subtest 'url_mail_to' => sub {
+
+  is(
+    'mailto:plicease@foo.test',
+    url {
+      url_mail_to 'plicease@foo.test';
+    },
+    'matches good',
+  );
+
+  is(
+    intercept { is('mailto:plicease@foo.test', url { url_mail_to "baz" }) },
+    array {
+      event 'Fail';
+      end;
+    },
+    'mail to fail',
+  );
+
+  is(
+    intercept { is('http://foo.test', url { url_mail_to "baz" }) },
+    array {
+      event 'Fail';
+      end;
+    },
+    'mail to fail with non-mailto URL',
   );
 
 };

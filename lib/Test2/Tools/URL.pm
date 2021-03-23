@@ -10,7 +10,7 @@ use Test2::Compare::String ();
 use Test2::Compare::Custom ();
 use base qw( Exporter );
 
-our @EXPORT = qw( url url_base url_component url_scheme url_host url_secure url_insecure );
+our @EXPORT = qw( url url_base url_component url_scheme url_host url_secure url_insecure url_mail_to );
 
 # ABSTRACT: Compare a URL in your Test2 test
 # VERSION
@@ -216,6 +216,23 @@ sub url_insecure ()
   goto &url_component;
 }
 
+=head2 url_mail_to
+
+ url {
+   url_mail_to $check;
+ }
+
+Checks that the email address in the given C<mailto> URL matches the check.
+For non-C<mailto> URLs this check will fail.
+
+=cut
+
+sub url_mail_to ($)
+{
+  @_ = ('to', $_[0], undef, 0);
+  goto &url_component;
+}
+
 package Test2::Tools::URL::Check;
 
 use overload ();
@@ -288,8 +305,8 @@ sub deltas
     
     my $method = $name;
     $method = 'host_port' if $method eq 'hostport';
-    my $value = $uri->$method;
-    $value = lc $value if $lc;
+    my $value = $uri->can($method) ? $uri->$method : undef;
+    $value = lc $value if $lc && defined $value;
     my $check = $convert->($expect);
 
     if($^O eq 'MSWin32' && $method eq 'path')
