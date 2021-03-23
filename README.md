@@ -84,13 +84,31 @@ Check that the given URL component matches.
 - fragment
 - user
 
+    \[version 0.06\]
+
     Note: for `ftp` URLs only.
 
 - password
 
+    \[version 0.06\]
+
     Note: for `ftp` URLs only.
 
+- media\_type
+
+    \[version 0.06\]
+
+    Note: for `data` URLs only.
+
+- data
+
+    \[version 0.06\]
+
+    Note: for `data` URLs only.
+
 ## url\_scheme
+
+\[version 0.06\]
 
 ```
 url {
@@ -103,6 +121,8 @@ to lower case for this test, so it is identical to using `url_component 'scheme'
 
 ## url\_host
 
+\[version 0.06\]
+
 ```
 url {
   url_host $check;
@@ -114,6 +134,8 @@ lower case for this test, unlike the `url_component 'host', $check` test describ
 
 ## url\_secure
 
+\[version 0.06\]
+
 ```
 url {
   url_secure();
@@ -124,6 +146,8 @@ Check that the given URL is using a secure protocol like `https` or `wss`.
 
 ## url\_insecure
 
+\[version 0.06\]
+
 ```
 url {
   url_insecure();
@@ -133,6 +157,8 @@ url {
 Check that the given URL is using an insecure protocol like `http` or `ftp`.
 
 ## url\_mail\_to
+
+\[version 0.06\]
 
 ```
 url {
