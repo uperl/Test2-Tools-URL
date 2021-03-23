@@ -82,6 +82,13 @@ Check that the given URL component matches.
     May be either a string, list or array!
 
 - fragment
+- user
+
+    Note: for `ftp` URLs only.
+
+- password
+
+    Note: for `ftp` URLs only.
 
 ## url\_scheme
 

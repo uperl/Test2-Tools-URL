@@ -115,6 +115,14 @@ May be either a string, list or array!
 
 =item fragment
 
+=item user
+
+Note: for C<ftp> URLs only.
+
+=item password
+
+Note: for C<ftp> URLs only.
+
 =back
 
 =cut
@@ -127,9 +135,9 @@ sub url_component ($$)
   if($check_name)
   {
     Carp::croak("$name is not a valid URL component")
-      unless $name =~ /^(?:scheme|authority|userinfo|hostport|host|port|path|query|fragment)$/;
+      unless $name =~ /^(?:scheme|authority|userinfo|hostport|host|port|path|query|fragment|user|password)$/;
   }
-  
+
   my $build = Test2::Compare::get_build()or Carp::croak("No current build!");
   $build->add_component($name, $expect, $lc);
 }
@@ -259,16 +267,16 @@ sub verify
 {
   my($self, %params) = @_;
   my($got, $exists) = @params{qw/ got exists /};
-  
+
   return 0 unless $exists;
   return 0 unless $got;
   return 0 if ref($got) && !blessed($got);
   return 0 if ref($got) && !overload::Method($got, '""');
-  
-  my $url = eval { $self->_uri($got) };  
+
+  my $url = eval { $self->_uri($got) };
   return 0 if $@;
   return 0 if ! $url->has_recognized_scheme;
-  
+
   return 1;
 }
 
@@ -296,13 +304,13 @@ sub deltas
   my($got, $convert, $seen) = @args{'got', 'convert', 'seen'};
 
   my $uri = $self->_uri($got);
-  
+
   my @deltas;
-  
+
   foreach my $comp (@{ $self->{component} })
   {
     my($name, $expect, $lc) = @$comp;
-    
+
     my $method = $name;
     $method = 'host_port' if $method eq 'hostport';
     my $value = $uri->can($method) ? $uri->$method : undef;
@@ -335,7 +343,7 @@ sub deltas
       got     => $value,
     );
   }
-  
+
   @deltas;
 }
 
