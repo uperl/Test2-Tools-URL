@@ -7,6 +7,8 @@ imported_ok $_ for qw(
   url_component
   url_scheme
   url_host
+  url_secure
+  url_insecure
 );
 
 subtest 'as string' => sub {
@@ -310,6 +312,15 @@ subtest 'url_scheme' => sub {
     "test scheme in mixed case",
   );
 
+  is(
+    intercept { is("http:://foo", url { url_scheme 'ftp' }) },
+    array {
+      event 'Fail';
+      end;
+    },
+    'test schme fail',
+  );
+
 };
 
 subtest 'url_host' => sub {
@@ -320,6 +331,53 @@ subtest 'url_host' => sub {
       url_host 'foo.bar';
     },
     "test host in mixed case",
+  );
+
+  is(
+    intercept { is("http:://foo", url { url_host 'baz' }) },
+    array {
+      event 'Fail';
+      end;
+    },
+    'test schme fail',
+  );
+
+};
+
+subtest 'url_secure / url_insecure' => sub {
+
+  is(
+    "https://foo.bar",
+    url {
+      url_secure();
+    },
+    'secure pass',
+  );
+
+  is(
+    intercept { is("https://foo.bar", url { url_insecure() }) },
+    array {
+      event 'Fail';
+      end;
+    },
+    'insecure fail',
+  );
+
+  is(
+    "http://foo.bar",
+    url {
+      url_insecure();
+    },
+    'insecure pass',
+  );
+
+  is(
+    intercept { is("http://foo.bar", url { url_secure() }) },
+    array {
+      event 'Fail';
+      end;
+    },
+    'secure fail',
   );
 
 };
