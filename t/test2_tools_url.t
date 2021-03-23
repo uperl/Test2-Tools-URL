@@ -451,6 +451,53 @@ subtest 'ftp URLs' => sub {
     'url user + password test fail on non-FTP URL',
   );
 
+};
+
+subtest 'data URLs' => sub {
+
+  my $url = URI->new('data:');
+  $url->media_type('text/plain');
+  $url->data('Hello, World!');
+  $url = "$url";
+
+  note "url = $url";
+
+  is(
+    $url,
+    url {
+      url_component 'media_type' => 'text/plain';
+      url_component 'data'       => 'Hello, World!';
+    },
+    'url media type + data test pass',
+  );
+
+  is(
+    intercept { is($url, url { url_component 'media_type' => 'foo' }) },
+    array {
+      event 'Fail';
+      end;
+    },
+    'url media type fail',
+  );
+
+  is(
+    intercept { is($url, url { url_component 'data' => 'foo' }) },
+    array {
+      event 'Fail';
+      end;
+    },
+    'url data fail',
+  );
+
+  is(
+    intercept { is("http://foo.test", url { url_component 'media_type' => 'foo'; url_component 'data' => 'foo' }) },
+    array {
+      event 'Fail';
+      end;
+    },
+    'url media_type + data fail on non-data URL',
+  );
+
 
 };
 

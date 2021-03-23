@@ -117,11 +117,27 @@ May be either a string, list or array!
 
 =item user
 
+[version 0.06]
+
 Note: for C<ftp> URLs only.
 
 =item password
 
+[version 0.06]
+
 Note: for C<ftp> URLs only.
+
+=item media_type
+
+[version 0.06]
+
+Note: for C<data> URLs only.
+
+=item data
+
+[version 0.06]
+
+Note: for C<data> URLs only.
 
 =back
 
@@ -135,7 +151,7 @@ sub url_component ($$)
   if($check_name)
   {
     Carp::croak("$name is not a valid URL component")
-      unless $name =~ /^(?:scheme|authority|userinfo|hostport|host|port|path|query|fragment|user|password)$/;
+      unless $name =~ /^(?:scheme|authority|userinfo|hostport|host|port|path|query|fragment|user|password|media_type|data)$/;
   }
 
   my $build = Test2::Compare::get_build()or Carp::croak("No current build!");
@@ -143,6 +159,8 @@ sub url_component ($$)
 }
 
 =head2 url_scheme
+
+[version 0.06]
 
  url {
    url_scheme $check;
@@ -161,6 +179,8 @@ sub url_scheme ($)
 
 =head2 url_host
 
+[version 0.06]
+
  url {
    url_host $check;
  }
@@ -177,6 +197,8 @@ sub url_host ($)
 }
 
 =head2 url_secure
+
+[version 0.06]
 
  url {
    url_secure();
@@ -202,6 +224,8 @@ sub url_secure ()
 
 =head2 url_insecure
 
+[version 0.06]
+
  url {
    url_insecure();
  }
@@ -225,6 +249,8 @@ sub url_insecure ()
 }
 
 =head2 url_mail_to
+
+[version 0.06]
 
  url {
    url_mail_to $check;
