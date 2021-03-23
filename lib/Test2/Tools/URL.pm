@@ -9,7 +9,7 @@ use Test2::Compare::Hash   ();
 use Test2::Compare::String ();
 use base qw( Exporter );
 
-our @EXPORT = qw( url url_base url_component );
+our @EXPORT = qw( url url_base url_component url_scheme url_host );
 
 # ABSTRACT: Compare a URL in your Test2 test
 # VERSION
@@ -22,8 +22,8 @@ our @EXPORT = qw( url url_base url_component );
  is(
    "http://example.com/path1/path2?query=1#fragment",
    url {
-     url_component scheme   => 'http';
-     url_component host     => 'example.com';
+     url_scheme             => 'http';
+     url_host               => 'example.com';
      url_component path     => '/path1/path2';
      url_component query    => { query => 1 };
      url_component fragment => 'fragment';
@@ -92,6 +92,8 @@ Check that the given URL component matches.
 
 =item scheme
 
+Note: scheme I<is> normalized to lower case for this test.
+
 =item authority
 
 =item userinfo
@@ -99,6 +101,8 @@ Check that the given URL component matches.
 =item hostport
 
 =item host
+
+Note: hostname I<is not> normalized to lower case for this test.  To test the normalized hostname use C<url_host> below.
 
 =item port
 
@@ -116,14 +120,48 @@ May be either a string, list or array!
 
 sub url_component ($$)
 {
-  my($name, $expect) = @_;
+  my($name, $expect, $lc) = @_;
   
   Carp::croak("$name is not a valid URL component")
     unless $name =~ /^(?:scheme|authority|userinfo|hostport|host|port|path|query|fragment)$/;
   
   my $build = Test2::Compare::get_build()or Carp::croak("No current build!");
-  $build->add_component($name, $expect);
-}  
+  $build->add_component($name, $expect, $lc);
+}
+
+=head2 url_scheme
+
+ url {
+   url_scheme $check;
+ }
+
+Check that the given URL scheme matches C<$check>.  Note that the scheme I<is> normalized
+to lower case for this test, so it is identical to using C<url_component 'scheme', $check>.
+
+=cut
+
+sub url_scheme ($)
+{
+  unshift @_, 'scheme';
+  goto &url_component;
+}
+
+=head2 url_host
+
+ url {
+   url_host $check;
+ }
+
+Check that the given URL host matches C<$check>.  Note that the host I<is> normalized to
+lower case for this test, unlike the C<url_component 'host', $check> test described above.
+
+=cut
+
+sub url_host ($)
+{
+  @_ = ('host', $_[0], 1);
+  goto &url_component;
+}
 
 package Test2::Tools::URL::Check;
 
@@ -178,8 +216,8 @@ sub set_global_base
 
 sub add_component
 {
-  my($self, $name, $expect) = @_;
-  push @{ $self->{component} }, [ $name, $expect ];
+  my($self, $name, $expect, $lc) = @_;
+  push @{ $self->{component} }, [ $name, $expect, $lc ];
 }
 
 sub deltas
@@ -193,11 +231,12 @@ sub deltas
   
   foreach my $comp (@{ $self->{component} })
   {
-    my($name, $expect) = @$comp;
+    my($name, $expect, $lc) = @$comp;
     
     my $method = $name;
     $method = 'host_port' if $method eq 'hostport';
     my $value = $uri->$method;
+    $value = lc $value if $lc;
     my $check = $convert->($expect);
 
     if($^O eq 'MSWin32' && $method eq 'path')
