@@ -125,6 +125,17 @@ url {
 
 Check that the given URL is using an insecure protocol like `http` or `ftp`.
 
+## url\_mail\_to
+
+```
+url {
+  url_mail_to $check;
+}
+```
+
+Checks that the email address in the given `mailto` URL matches the check.
+For non-`mailto` URLs this check will fail.
+
 # SEE ALSO
 
 [Test2::Suite](https://metacpan.org/pod/Test2::Suite)
