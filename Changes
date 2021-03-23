@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Move to new github org
 
 0.05      2019-07-15 13:03:09 -0400
   - Better handling of duplicate keys in query parameters (alabamapaul++ gh#4)
