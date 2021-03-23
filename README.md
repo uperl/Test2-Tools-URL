@@ -11,8 +11,8 @@ use Test2::Tools::URL;
 is(
   "http://example.com/path1/path2?query=1#fragment",
   url {
-    url_component scheme   => 'http';
-    url_component host     => 'example.com';
+    url_scheme             => 'http';
+    url_host               => 'example.com';
     url_component path     => '/path1/path2';
     url_component query    => { query => 1 };
     url_component fragment => 'fragment';
@@ -65,10 +65,16 @@ url {
 Check that the given URL component matches.
 
 - scheme
+
+    Note: scheme _is_ normalized to lower case for this test.
+
 - authority
 - userinfo
 - hostport
 - host
+
+    Note: hostname _is not_ normalized to lower case for this test.  To test the normalized hostname use `url_host` below.
+
 - port
 - path
 - query
@@ -76,6 +82,28 @@ Check that the given URL component matches.
     May be either a string, list or array!
 
 - fragment
+
+## url\_scheme
+
+```
+url {
+  url_scheme $check;
+}
+```
+
+Check that the given URL scheme matches `$check`.  Note that the scheme _is_ normalized
+to lower case for this test, so it is identical to using `url_component 'scheme', $check`.
+
+## url\_host
+
+```
+url {
+  url_host $check;
+}
+```
+
+Check that the given URL host matches `$check`.  Note that the host _is_ normalized to
+lower case for this test, unlike the `url_component 'host', $check` test described above.
 
 # SEE ALSO
 

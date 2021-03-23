@@ -5,6 +5,8 @@ imported_ok $_ for qw(
   url
   url_base
   url_component
+  url_scheme
+  url_host
 );
 
 subtest 'as string' => sub {
@@ -296,6 +298,30 @@ subtest 'query as hash with repeated keys' => sub {
     },
     "expected query for hashref with repeated keys"
   );
+};
+
+subtest 'url_scheme' => sub {
+
+  is(
+    "htTp://foo.bar/",
+    url {
+      url_scheme 'http';
+    },
+    "test scheme in mixed case",
+  );
+
+};
+
+subtest 'url_host' => sub {
+
+  is(
+    "http://fOo.bar/",
+    url {
+      url_host 'foo.bar';
+    },
+    "test host in mixed case",
+  );
+
 };
 
 done_testing
