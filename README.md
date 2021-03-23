@@ -105,6 +105,26 @@ url {
 Check that the given URL host matches `$check`.  Note that the host _is_ normalized to
 lower case for this test, unlike the `url_component 'host', $check` test described above.
 
+## url\_secure
+
+```
+url {
+  url_secure();
+}
+```
+
+Check that the given URL is using a secure protocol like `https` or `wss`.
+
+## url\_insecure
+
+```
+url {
+  url_insecure();
+}
+```
+
+Check that the given URL is using an insecure protocol like `http` or `ftp`.
+
 # SEE ALSO
 
 [Test2::Suite](https://metacpan.org/pod/Test2::Suite)

@@ -1,7 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
-  - Add url_scheme and url_host checks (gh#6)
+  - Added: url_scheme, url_host, url_secure and url_insecure checks (gh#6)
   - Move to new github org
 
 0.05      2019-07-15 13:03:09 -0400

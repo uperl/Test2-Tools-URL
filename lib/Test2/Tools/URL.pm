@@ -7,9 +7,10 @@ use Carp                   ();
 use Test2::Compare         ();
 use Test2::Compare::Hash   ();
 use Test2::Compare::String ();
+use Test2::Compare::Custom ();
 use base qw( Exporter );
 
-our @EXPORT = qw( url url_base url_component url_scheme url_host );
+our @EXPORT = qw( url url_base url_component url_scheme url_host url_secure url_insecure );
 
 # ABSTRACT: Compare a URL in your Test2 test
 # VERSION
@@ -120,10 +121,14 @@ May be either a string, list or array!
 
 sub url_component ($$)
 {
-  my($name, $expect, $lc) = @_;
-  
-  Carp::croak("$name is not a valid URL component")
-    unless $name =~ /^(?:scheme|authority|userinfo|hostport|host|port|path|query|fragment)$/;
+  my($name, $expect, $lc, $check_name) = @_;
+
+  $check_name = 1 unless defined $check_name;
+  if($check_name)
+  {
+    Carp::croak("$name is not a valid URL component")
+      unless $name =~ /^(?:scheme|authority|userinfo|hostport|host|port|path|query|fragment)$/;
+  }
   
   my $build = Test2::Compare::get_build()or Carp::croak("No current build!");
   $build->add_component($name, $expect, $lc);
@@ -160,6 +165,54 @@ lower case for this test, unlike the C<url_component 'host', $check> test descri
 sub url_host ($)
 {
   @_ = ('host', $_[0], 1);
+  goto &url_component;
+}
+
+=head2 url_secure
+
+ url {
+   url_secure();
+ }
+
+Check that the given URL is using a secure protocol like C<https> or C<wss>.
+
+=cut
+
+sub url_secure ()
+{
+  my @caller = caller;
+  my $test = Test2::Compare::Custom->new(
+    code     => sub { defined $_ && ( ref $_ || $_ ) ? 1 : 0 },
+    name     => 'TRUE',
+    operator => 'TRUE()',
+    file     => $caller[1],
+    lines    => [$caller[2]],
+  );
+  @_ = ('secure', $test, undef, 0);
+  goto &url_component;
+}
+
+=head2 url_insecure
+
+ url {
+   url_insecure();
+ }
+
+Check that the given URL is using an insecure protocol like C<http> or C<ftp>.
+
+=cut
+
+sub url_insecure ()
+{
+  my @caller = caller;
+  my $test = Test2::Compare::Custom->new(
+    code => sub { my %p = @_; $p{got} ? 0 : $p{exists} },
+    name => 'FALSE',
+    operator => 'FALSE()',
+    file     => $caller[1],
+    lines    => [$caller[2]],
+  );
+  @_ = ('secure', $test, undef, 0);
   goto &url_component;
 }
 

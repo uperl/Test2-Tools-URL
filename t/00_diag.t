@@ -15,6 +15,7 @@ $modules{$_} = $_ for qw(
   Mojolicious
   Test2::Compare
   Test2::Compare::Base
+  Test2::Compare::Custom
   Test2::Compare::Hash
   Test2::Compare::String
   Test2::V0
