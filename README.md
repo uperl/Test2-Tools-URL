@@ -1,23 +1,25 @@
-# Test2::Tools::URL [![Build Status](https://secure.travis-ci.org/plicease/Test2-Tools-URL.png)](http://travis-ci.org/plicease/Test2-Tools-URL)
+# Test2::Tools::URL ![linux](https://github.com/plicease/Test2-Tools-URL/workflows/linux/badge.svg) ![macos](https://github.com/plicease/Test2-Tools-URL/workflows/macos/badge.svg) ![windows](https://github.com/plicease/Test2-Tools-URL/workflows/windows/badge.svg) ![cygwin](https://github.com/plicease/Test2-Tools-URL/workflows/cygwin/badge.svg) ![msys2-mingw](https://github.com/plicease/Test2-Tools-URL/workflows/msys2-mingw/badge.svg)
 
 Compare a URL in your Test2 test
 
 # SYNOPSIS
 
-    use Test2::V0;
-    use Test2::Tools::URL;
-    
-    is(
-      "http://example.com/path1/path2?query=1#fragment",
-      url {
-        url_component scheme   => 'http';
-        url_component host     => 'example.com';
-        url_component path     => '/path1/path2';
-        url_component query    => { query => 1 };
-        url_component fragment => 'fragment';
-      },
-      'url is as expected',
-    );
+```perl
+use Test2::V0;
+use Test2::Tools::URL;
+
+is(
+  "http://example.com/path1/path2?query=1#fragment",
+  url {
+    url_component scheme   => 'http';
+    url_component host     => 'example.com';
+    url_component path     => '/path1/path2';
+    url_component query    => { query => 1 };
+    url_component fragment => 'fragment';
+  },
+  'url is as expected',
+);
+```
 
 # DESCRIPTION
 
@@ -35,24 +37,30 @@ tool is intended to help!
 
 ## url
 
-    my $check = url {}
+```perl
+my $check = url {}
+```
 
 Checks that the given string or object is a valid URL.
 
 ## url\_base
 
-    url {
-      url_base $url;
-    };
+```
+url {
+  url_base $url;
+};
+```
 
 Use the given base URL for relative paths.  If specified outside of a URL,
 then it will apply to all url checks.
 
 ## url\_component
 
-    url {
-      url_component $component, $check;
-    }
+```
+url {
+  url_component $component, $check;
+}
+```
 
 Check that the given URL component matches.
 
