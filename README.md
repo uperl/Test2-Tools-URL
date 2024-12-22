@@ -1,4 +1,4 @@
-# Test2::Tools::URL ![linux](https://github.com/uperl/Test2-Tools-URL/workflows/linux/badge.svg) ![macos](https://github.com/uperl/Test2-Tools-URL/workflows/macos/badge.svg) ![windows](https://github.com/uperl/Test2-Tools-URL/workflows/windows/badge.svg) ![msys2-mingw](https://github.com/uperl/Test2-Tools-URL/workflows/msys2-mingw/badge.svg)
+# Test2::Tools::URL ![linux](https://github.com/uperl/Test2-Tools-URL/workflows/linux/badge.svg) ![macos](https://github.com/uperl/Test2-Tools-URL/workflows/macos/badge.svg) ![windows](https://github.com/uperl/Test2-Tools-URL/workflows/windows/badge.svg)
 
 Compare a URL in your Test2 test
 
