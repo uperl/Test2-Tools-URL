@@ -11,8 +11,8 @@ use Test2::Tools::URL;
 is(
   "http://example.com/path1/path2?query=1#fragment",
   url {
-    url_scheme             => 'http';
-    url_host               => 'example.com';
+    url_scheme 'http';
+    url_host   'example.com';
     url_component path     => '/path1/path2';
     url_component query    => { query => 1 };
     url_component fragment => 'fragment';
