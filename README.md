@@ -1,4 +1,4 @@
-# Test2::Tools::URL ![linux](https://github.com/uperl/Test2-Tools-URL/workflows/linux/badge.svg) ![macos](https://github.com/uperl/Test2-Tools-URL/workflows/macos/badge.svg) ![windows](https://github.com/uperl/Test2-Tools-URL/workflows/windows/badge.svg)
+# Test2::Tools::URL ![linux](https://github.com/uperl/Test2-Tools-URL/workflows/linux/badge.svg)
 
 Compare a URL in your Test2 test
 
@@ -180,6 +180,8 @@ Author: Graham Ollis <plicease@cpan.org>
 Contributors:
 
 Paul Durden (alabamapaul, PDURDEN)
+
+Yoshikazu Sawa (yoshikazusawa)
 
 # COPYRIGHT AND LICENSE
 
